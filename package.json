@@ -3,6 +3,8 @@
     "@dice-roller/rpg-dice-roller": "^5.5.0",
     "axios": "^1.6.4",
     "discord.js": "^14.14.1",
+    "heic-convert": "^2.1.0",
+    "node-fetch": "^2.7.0",
     "npm": "^10.2.5",
     "sqlite3": "^5.1.7-rc.0"
   }
