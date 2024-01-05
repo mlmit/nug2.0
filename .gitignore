@@ -1,0 +1,7 @@
+node_modules
+.env
+config.json
+db/doomsux.sqlite
+db/seen.sqlite
+db/seen.bak
+db/doomsux.bak
