@@ -7,7 +7,7 @@ let suxdb = new sqlite3.Database('/home/mark/nug/db/doomsux.sqlite', (err) => {
     console.log(`Connected to doomsux database`);
 });
 
-let seendb = new sqlite3.Database('seen.sqlite', (err) => {
+let seendb = new sqlite3.Database('/home/mark/nug/db/seen.sqlite', (err) => {
     if (err) {
         console.log(err.message);
     }
