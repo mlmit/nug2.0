@@ -7,7 +7,7 @@ module.exports = {
 		.setDescription('Gives bot uptime stats'),
 	async execute(interaction) {
         let uptimeDate = '';
-        uptimeDate = convertMS(client.uptime);
+        uptimeDate = await convertMS(interaction.client.uptime);
 		await interaction.reply(`It has been ${uptimeDate} since Smash restarted me to test some shitty code`);
 	},
 };
