@@ -1,0 +1,7 @@
+{
+    "token": "YOUR BOT TOKEN FROM DISCORD HERE",
+    "clientId": "YOUR BOT'S CLIENT ID HERE",
+    "guildId": "YOUR DISCORD SERVER GUILD ID HERE",
+    "wolframID": "YOUR WOLFRAM ALPHA API KEY + URL HERE",
+    "bingServiceKey": "BING SERVICE API KEY HERE"
+}
