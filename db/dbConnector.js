@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
+const { dbPathSux } = require('../paths.json');
 
-let suxdb = new sqlite3.Database('/home/mark/nug/db/doomsux.sqlite', (err) => {
+let suxdb = new sqlite3.Database(dbPathSux, (err) => {
     if (err) {
         console.log(err.message);
     }

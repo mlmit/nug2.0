@@ -1,3 +1,4 @@
 {
-    "dbPath": "/home/mark/nug/db/"
+    "dbPathSux": "/home/mark/nug/db/doomsux.sqlite",
+    "dbPathSeen": "/home/mark/nug/db/seen.sqlite"
 }
