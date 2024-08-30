@@ -1,3 +1,4 @@
+const { alphaVantageKey } = require('../../config.json');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { createCanvas, registerFont } = require('canvas');
 const { Chart, registerables } = require('chart.js');
@@ -9,7 +10,7 @@ const axios = require('axios');
 // Register required components
 Chart.register(...registerables);
 
-const ALPHA_VANTAGE_API_KEY = 'N2K48TKM819GLVI1'; // Replace with your Alpha Vantage API key
+const ALPHA_VANTAGE_API_KEY = alphaVantageKey; // Replace with your Alpha Vantage API key
 
 module.exports = {
     data: new SlashCommandBuilder()
