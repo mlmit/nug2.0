@@ -35,5 +35,10 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+function kumaCheckin() {
+	fetch('http://10.0.0.22:3001/api/push/M9qRCu4fyj?status=up&msg=OK&ping=');
+};
+
+setInterval(kumaCheckin, 59000);
 
 client.login(token);
