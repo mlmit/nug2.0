@@ -12,7 +12,7 @@ module.exports = {
     
     async execute(interaction) {
         // Defer reply to give time for the operation to complete
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply();
         
         try {
             const newTopic = interaction.options.getString('text');
@@ -21,15 +21,14 @@ module.exports = {
             // Check if the bot has permissions to edit the channel
             if (!channel.permissionsFor(interaction.guild.members.me).has(PermissionFlagsBits.ManageChannels)) {
                 return interaction.editReply({ 
-                    content: '❌ I don\'t have permission to manage channels!', 
-                    ephemeral: true 
+                    content: '❌ I don\'t have permission to manage channels!'
                 });
             }
             
             // Set the new topic
             await channel.setTopic(newTopic);
             
-            // Send success message
+            // Send success message - now visible to everyone in the channel
             await interaction.editReply({ 
                 content: `✅ Channel topic has been updated to: "${newTopic}"`
             });
@@ -37,8 +36,7 @@ module.exports = {
         } catch (error) {
             console.error(error);
             await interaction.editReply({ 
-                content: '❌ There was an error while updating the channel topic!',
-                ephemeral: true
+                content: '❌ There was an error while updating the channel topic!'
             });
         }
     },
