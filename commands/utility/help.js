@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,7 +8,7 @@ module.exports = {
         const commands = interaction.client.commands; // Assuming commands are stored in client.commands
 
         if (!commands || commands.size === 0) {
-            return interaction.reply({ content: 'No commands are available.', ephemeral: true });
+            return interaction.reply({ content: 'No commands are available.', flags: MessageFlags.Ephemeral });
         }
 
         // Create a help message dynamically from the commands collection
@@ -23,6 +22,6 @@ module.exports = {
         });
 
         // Reply with the help embed, set to be ephemeral
-        await interaction.reply({ embeds: [helpEmbed], ephemeral: true });
+        await interaction.reply({ embeds: [helpEmbed], flags: MessageFlags.Ephemeral });
     },
 };

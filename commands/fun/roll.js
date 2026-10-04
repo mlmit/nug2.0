@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { DiceRoller } = require('@dice-roller/rpg-dice-roller');
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
             const result = roller.log.shift();
             await interaction.reply(`🎲 Rolled: ${result}`);
         } catch (error) {
-            await interaction.reply({ content: `There was an error with your roll: ${error.message}`, ephemeral: true});
+            await interaction.reply({ content: `There was an error with your roll: ${error.message}`, flags: MessageFlags.Ephemeral});
         }
     },
 };

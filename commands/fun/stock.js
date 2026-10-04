@@ -1,5 +1,5 @@
 const { alphaVantageKey } = require('../../config.json');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { createCanvas, registerFont } = require('canvas');
 const { Chart, registerables } = require('chart.js');
 const axios = require('axios');
@@ -97,7 +97,7 @@ module.exports = {
 
         } catch (error) {
             console.error('Error fetching or processing stock data:', error);
-            await interaction.reply({ content: `Error fetching stock data: ${error.message}`, ephemeral: true });
+            await interaction.reply({ content: `Error fetching stock data: ${error.message}`, flags: MessageFlags.Ephemeral });
         }
     },
 };

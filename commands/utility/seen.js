@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
@@ -26,7 +26,7 @@ module.exports = {
         db.get(`SELECT * FROM seen WHERE user_id = ?`, [user.id], (err, row) => {
             if (err) {
                 console.error('Error retrieving seen data:', err.message);
-                interaction.reply({ content: 'An error occurred while retrieving data.', ephemeral: true });
+                interaction.reply({ content: 'An error occurred while retrieving data.', flags: MessageFlags.Ephemeral });
                 return;
             }
 
