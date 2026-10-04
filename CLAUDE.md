@@ -20,7 +20,7 @@ You must rerun `deploy-commands.js` whenever you add a command, remove one, or c
 ## Configuration
 
 - `config.json` is gitignored. Use `config.example` as the template, but it lists only some of the keys the code reads. The full set is: `token`, `clientId`, `guildId`, `wolframID`, `wolframAPI`, `imgFlipUser`, `imgFlipPass`, `alphaVantageKey` and `braveApiKey`. Modules load keys directly with `require('../config.json')`.
-- `discordusers.json` maps nicknames to Discord user IDs (for example `doomID`). `events/messageCreate.js` destructures it.
+- `discordusers.json` (gitignored, optional) maps nicknames to Discord user IDs (for example `doomID`). No code currently reads it.
 - Some IDs are hardcoded: the emoji announcement channel in `events/emojiCreate.js`, an ignored user ID in `messageCreate.js`, and an Uptime Kuma push URL on the LAN (`kumaCheckin` in `index.js`, sent every 59s).
 
 ## Architecture

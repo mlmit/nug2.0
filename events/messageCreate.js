@@ -1,6 +1,4 @@
 const { Events, AttachmentBuilder } = require('discord.js');
-const { b00ID, doomID, gidID, heelaID, ikeID, mithrusID, hihatID, witzID, nemesisID, omegaID, sainID,
-    skierID, smash0rID, stubbsID, uriID, wangzangID, servoID, dromioID, maxyID, papeID, porkID, ellisID, p0ngID, nugID, nug2ID } = require('../discordusers.json');
 const heicConvert = require('heic-convert');
 const axios = require('axios');
 const sqlite3 = require('sqlite3').verbose();
