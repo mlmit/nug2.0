@@ -27,7 +27,7 @@ You must rerun `deploy-commands.js` whenever you add a command, remove one, or c
 
 - **Dynamic loading:** `index.js` and `deploy-commands.js` both scan `commands/<category>/*.js`, one directory level deep. Each command module exports `{ data: SlashCommandBuilder, execute(interaction) }`, and a file missing either export is skipped with a warning. To add a command, drop a file into a category folder (`fun/` or `utility/`). No registration list needs editing. `help.js` builds its output from `client.commands`.
 - **Events:** each `events/*.js` file exports `{ name, once?, execute }` and is wired up automatically. `interactionCreate.js` dispatches slash commands and owns the generic error reply. `messageCreate.js` handles non-command behavior on every message: it upserts the `seen` table, adds keyword reactions, and converts HEIC attachments to JPEG.
-- **Shared helpers:** reusable code lives in `functions/`, including Brave image search (`braveImageSearch.js`), URL validation and `convertMS`.
+- **Shared helpers:** reusable code lives in `functions/`, including Brave image search (`braveImageSearch.js`), RedGifs search (`redgifsSearch.js`: no API key; its temporary token is bound to the server IP and User-Agent, and it keeps an in-memory list of recent picks to avoid repeats), URL validation and `convertMS`.
 - **SQLite (two DBs in `db/`, both gitignored):**
   - `seen.sqlite`: `messageCreate.js` and `commands/utility/seen.js` each open their own connection via a path relative to `__dirname`.
   - `doomsux.sqlite` (table `doomsuxes`): accessed through `db/dbConnector.js`, which also exports a `seendb` connection.
