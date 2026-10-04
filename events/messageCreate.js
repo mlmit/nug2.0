@@ -5,6 +5,7 @@ const heicConvert = require('heic-convert');
 const axios = require('axios');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const { getFactoidReply } = require('../functions/factoids.js');
 
 // Create or open the SQLite database
 const db = new sqlite3.Database(path.resolve(__dirname, '../db/seen.sqlite'), (err) => {
@@ -64,6 +65,18 @@ module.exports = {
             message.react('539136926473519104');
             message.react('555924565310570497');
             return;
+        }
+
+        // Reply with a factoid when the message (optionally ending in '?') matches a factoid_key
+
+        try {
+            const who = message.member?.displayName ?? message.author.username;
+            const factoid = await getFactoidReply(message.content, who);
+            if (factoid) {
+                await message.channel.send({ content: factoid, allowedMentions: { parse: [] } });
+            }
+        } catch (error) {
+            console.error('Error looking up factoid:', error);
         }
 
         // Handle HEIC file attachments
