@@ -7,6 +7,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const { getFactoidReply } = require('../functions/factoids.js');
 const { learnFactoid } = require('../functions/learnFactoid.js');
+const { isAllowedChannel } = require('../functions/allowedChannels.js');
 
 // Create or open the SQLite database
 const db = new sqlite3.Database(path.resolve(__dirname, '../db/seen.sqlite'), (err) => {
@@ -59,9 +60,12 @@ module.exports = {
             }
         });        
         
+        // Everything below except HEIC conversion only runs in the allowed channels
+        const inAllowedChannel = isAllowedChannel(message.channelId, message.channel);
+
         // Check for specific commands and actions
 
-        if (message.content === 'computers') {
+        if (inAllowedChannel && message.content === 'computers') {
             message.react('💩');
             message.react('539136926473519104');
             message.react('555924565310570497');
@@ -71,15 +75,17 @@ module.exports = {
         // Reply with a factoid when the message (optionally ending in '?') matches a factoid_key,
         // otherwise learn from "x is y", "no, x is y" and "x is also y"
 
-        try {
-            const who = message.member?.displayName ?? message.author.username;
-            const factoid = await getFactoidReply(message.content, who);
-            const reply = factoid ?? await learnFactoid(message.content, message.author.id);
-            if (reply) {
-                await message.channel.send({ content: reply, allowedMentions: { parse: [] } });
+        if (inAllowedChannel) {
+            try {
+                const who = message.member?.displayName ?? message.author.username;
+                const factoid = await getFactoidReply(message.content, who);
+                const reply = factoid ?? await learnFactoid(message.content, message.author.id);
+                if (reply) {
+                    await message.channel.send({ content: reply, allowedMentions: { parse: [] } });
+                }
+            } catch (error) {
+                console.error('Error handling factoid:', error);
             }
-        } catch (error) {
-            console.error('Error handling factoid:', error);
         }
 
         // Handle HEIC file attachments
