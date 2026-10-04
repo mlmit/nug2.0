@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const fetch = require('node-fetch');
 const { wolframAPI } = require('../../config.json');
 
 /**

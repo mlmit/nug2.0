@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { isUrl } = require('../../functions/isUrl.js');
 const { isValidUrl } = require('../../functions/isValidUrl.js')
 const db = require('../../db/dbConnector.js');
 
