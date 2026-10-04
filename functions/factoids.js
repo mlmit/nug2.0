@@ -102,4 +102,4 @@ async function getFactoidReply(content, who) {
     return reply;
 }
 
-module.exports = { getFactoidReply, forgetFactoid, normalizeKey, formatFactoid };
+module.exports = { getFactoidReply, forgetFactoid, findFactoid, normalizeKey, formatFactoid, MAX_KEY_LENGTH };
