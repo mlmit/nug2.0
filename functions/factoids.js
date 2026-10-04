@@ -9,14 +9,40 @@ function normalizeKey(content) {
 }
 
 // Keys were imported from infobot with a trailing space, so match with and without it
+function keyVariants(key) {
+    return [key, `${key} `, `${key}  `];
+}
+
 function findFactoid(key) {
     return new Promise((resolve, reject) => {
         db.suxdb.get(
             `SELECT factoid_key, factoid_value FROM factoids WHERE factoid_key IN (?, ?, ?) LIMIT 1`,
-            [key, `${key} `, `${key}  `],
+            keyVariants(key),
             (err, row) => (err ? reject(err) : resolve(row)),
         );
     });
+}
+
+// Deletes every stored variant of the key; returns { key, value } of the forgotten factoid, or null
+async function forgetFactoid(content) {
+    const key = normalizeKey(content);
+    if (!key || key.length > MAX_KEY_LENGTH) {
+        return null;
+    }
+
+    const row = await findFactoid(key);
+    if (!row) {
+        return null;
+    }
+
+    await new Promise((resolve, reject) => {
+        db.suxdb.run(
+            `DELETE FROM factoids WHERE factoid_key IN (?, ?, ?)`,
+            keyVariants(key),
+            (err) => (err ? reject(err) : resolve()),
+        );
+    });
+    return { key: row.factoid_key.trim(), value: row.factoid_value.trim() };
 }
 
 // storedKey is the factoid_key exactly as stored (with its trailing space)
@@ -76,4 +102,4 @@ async function getFactoidReply(content, who) {
     return reply;
 }
 
-module.exports = { getFactoidReply, normalizeKey, formatFactoid };
+module.exports = { getFactoidReply, forgetFactoid, normalizeKey, formatFactoid };
