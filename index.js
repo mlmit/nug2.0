@@ -36,7 +36,7 @@ for (const file of eventFiles) {
 	}
 }
 function kumaCheckin() {
-	fetch('http://10.0.0.22:3001/api/push/M9qRCu4fyj?status=up&msg=OK&ping=');
+	fetch('http://10.10.0.22:3001/api/push/M9qRCu4fyj?status=up&msg=OK&ping=');
 };
 
 setInterval(kumaCheckin, 59000);
