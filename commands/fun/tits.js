@@ -8,11 +8,12 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		try {
-			// The first term is the fallback when a modified search comes up empty
-			const modifier = ['round ', 'asian ', 'yoga ', 'slim ', 'athletic ', 'bikini ', 'lingerie ', 'tiny ', 'big '];
-			const searchTerms = ['boobs', ...modifier.map(m => m + 'boobs')];
-
-			const mediaUrl = await lib.searchRedgifs(searchTerms);
+			const mediaUrl = await lib.searchRedgifs({
+				niche: 'just-boobs',
+				requiredTags: ['Boobs', 'Tits', 'Big Tits', 'Small Tits', 'Natural Tits', 'Huge Tits', 'Fake Tits', 'Fake Boobs', 'Busty', 'Nipples', 'Titty Drop', 'Bouncing Tits', 'Sideboob', 'Underboob', 'Cleavage'],
+				// Results that are mostly about something lower down
+				excludedTags: ['Asshole', 'Pussy', 'Shaved Pussy', 'Spread Pussy', 'Wet Pussy'],
+			});
 			if (!mediaUrl) {
 				throw new Error('Failed to fetch media');
 			}

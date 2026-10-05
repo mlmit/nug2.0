@@ -8,11 +8,10 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		try {
-			// The first term is the fallback when a modified search comes up empty
-			const modifier = ['round ', 'asian ', 'yoga ', 'slim ', 'athletic ', 'bikini ', 'lingerie ', 'jeans '];
-			const searchTerms = ['ass', ...modifier.map(m => m + 'ass')];
-
-			const mediaUrl = await lib.searchRedgifs(searchTerms);
+			const mediaUrl = await lib.searchRedgifs({
+				niche: 'thick-booty',
+				requiredTags: ['Ass', 'Big Ass', 'Booty', 'Bubble Butt', 'Butt', 'Phat Ass', 'Pawg', 'Ass Shaking', 'Ass Clapping', 'Twerking', 'Thong', 'Jiggling'],
+			});
 			if (!mediaUrl) {
 				throw new Error('Failed to fetch media');
 			}
