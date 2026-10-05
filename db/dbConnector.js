@@ -19,4 +19,8 @@ let seendb = new sqlite3.Database(path.resolve(rootDir, dbPathSeen), (err) => {
     console.log(`Connected to seen database`);
 });
 
+// Wait briefly on a locked database (e.g. during a backup) instead of failing with SQLITE_BUSY
+suxdb.configure('busyTimeout', 5000);
+seendb.configure('busyTimeout', 5000);
+
 module.exports = { suxdb, seendb };

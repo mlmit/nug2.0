@@ -32,6 +32,7 @@ You must rerun `deploy-commands.js` whenever you add a command, remove one, or c
 - **SQLite (two DBs in `db/`, both gitignored):**
   - `seen.sqlite`: `messageCreate.js` and `commands/utility/seen.js` each open their own connection via a path relative to `__dirname`.
   - `doomsux.sqlite` (table `doomsuxes`): accessed through `db/dbConnector.js`, which also exports a `seendb` connection.
+  - **Backups:** `functions/dbBackup.js`, started from `index.js`, snapshots both DBs into `db/backups/` (gitignored) with `VACUUM INTO`. It checks hourly, backs up when the newest copy is 24h old, verifies each copy with `quick_check`, and keeps 5 per database. Connections set a `busyTimeout` so writes wait out a backup instead of failing.
   - `dbConnector.js` resolves the entries in `paths.json` relative to the repo root, so keep them relative (e.g. `db/doomsux.sqlite`) and don't use absolute paths.
 - Import builders and constants from `discord.js`, not `@discordjs/builders` (it's only a transitive dependency). Use `flags: MessageFlags.Ephemeral` for private replies; `ephemeral: true` is deprecated.
 - `package.json` has an `overrides` entry pinning `mathjs` (a dependency of the dice roller) to 15.x to fix a security advisory. Retest `/roll` if you change it.

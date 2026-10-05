@@ -6,3 +6,4 @@ db/doomsux.sqlite
 db/seen.sqlite
 db/seen.bak
 db/doomsux.bak
+db/backups/

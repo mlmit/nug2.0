@@ -2,6 +2,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const { token } = require('./config.json');
+const { startBackupSchedule } = require('./functions/dbBackup.js');
 
 const client = new Client({ intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.GuildPresences, GatewayIntentBits.DirectMessages ] });
 
@@ -40,5 +41,8 @@ function kumaCheckin() {
 };
 
 setInterval(kumaCheckin, 59000);
+
+// Back up the SQLite databases every 24 hours, keeping 5 copies of each
+startBackupSchedule();
 
 client.login(token);

@@ -23,6 +23,8 @@ const db = new sqlite3.Database(path.resolve(__dirname, '../db/seen.sqlite'), (e
         )`);
     }
 });
+// Wait briefly on a locked database (e.g. during a backup) instead of failing with SQLITE_BUSY
+db.configure('busyTimeout', 5000);
 
 module.exports = {
     name: Events.MessageCreate,
