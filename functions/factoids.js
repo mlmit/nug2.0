@@ -102,4 +102,48 @@ async function getFactoidReply(content, who) {
     return reply;
 }
 
-module.exports = { getFactoidReply, forgetFactoid, findFactoid, normalizeKey, formatFactoid, MAX_KEY_LENGTH };
+// Returns { key, value, createdBy, createdTime } of a random factoid, or null if there are none.
+// ORDER BY random() scans the table, but that's ~50ms for the ~240k imported rows.
+function getRandomFactoid() {
+    return new Promise((resolve, reject) => {
+        db.suxdb.get(
+            `SELECT factoid_key, factoid_value, created_by, created_time FROM factoids
+             WHERE trim(factoid_value) != '\\N' ORDER BY random() LIMIT 1`,
+            (err, row) => {
+                if (err) {
+                    return reject(err);
+                }
+                if (!row) {
+                    return resolve(null);
+                }
+                resolve({
+                    key: row.factoid_key.trim(),
+                    value: row.factoid_value,
+                    createdBy: parseCreatedBy(row.created_by),
+                    createdTime: parseCreatedTime(row.created_time),
+                });
+            },
+        );
+    });
+}
+
+// created_by is a Discord user ID, or '\N'/empty for most infobot imports
+function parseCreatedBy(createdBy) {
+    return /^\d+$/.test(createdBy ?? '') ? createdBy : null;
+}
+
+// created_time is unix seconds (imports), 'YYYY-MM-DD HH:MM:SS' UTC (learned via datetime('now')), or '\N';
+// returns unix seconds or null
+function parseCreatedTime(createdTime) {
+    if (typeof createdTime === 'number') {
+        return createdTime;
+    }
+    const match = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/.exec(createdTime ?? '');
+    if (!match) {
+        return null;
+    }
+    const [, y, mo, d, h, mi, s] = match.map(Number);
+    return Math.floor(Date.UTC(y, mo - 1, d, h, mi, s) / 1000);
+}
+
+module.exports = { getFactoidReply, getRandomFactoid, forgetFactoid, findFactoid, normalizeKey, formatFactoid, MAX_KEY_LENGTH };
