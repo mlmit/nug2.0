@@ -65,11 +65,9 @@ module.exports = {
 
         // Check for specific commands and actions
 
-        if (inAllowedChannel && message.content === 'computers') {
-            message.react('💩');
-            message.react('539136926473519104');
-            message.react('555924565310570497');
-            return;
+        // Randomly react to about 1 in 20 of this user's messages
+        if (inAllowedChannel && message.author.id === '152091588162617345' && Math.random() < 1 / 20) {
+            message.react('555924565310570497').catch(err => console.error('Error adding random reaction:', err.message));
         }
 
         // Reply with a factoid when the message (optionally ending in '?') matches a factoid_key,
