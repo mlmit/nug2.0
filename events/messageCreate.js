@@ -79,9 +79,16 @@ module.exports = {
             try {
                 const who = message.member?.displayName ?? message.author.username;
                 const factoid = await getFactoidReply(message.content, who);
-                const reply = factoid ?? await learnFactoid(message.content, message.author.id);
-                if (reply) {
-                    await message.channel.send({ content: reply, allowedMentions: { parse: [] } });
+                if (factoid?.reactions) {
+                    // React in order; skip anything Discord rejects (e.g. text or an emoji from another server)
+                    for (const emoji of factoid.reactions) {
+                        await message.react(emoji).catch(err => console.error(`Error reacting with ${emoji}:`, err.message));
+                    }
+                } else {
+                    const reply = factoid?.content ?? await learnFactoid(message.content, message.author.id);
+                    if (reply) {
+                        await message.channel.send({ content: reply, allowedMentions: { parse: [] } });
+                    }
                 }
             } catch (error) {
                 console.error('Error handling factoid:', error);

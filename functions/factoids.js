@@ -58,8 +58,35 @@ function incrementRequestedCount(storedKey) {
     );
 }
 
+// Discord allows at most 20 distinct reactions per message
+const MAX_REACTIONS = 20;
+const CUSTOM_EMOJI = /(<a?:\w+:\d+>)/;
+const graphemes = new Intl.Segmenter();
+
+// Splits a <react> argument into emoji: custom '<:name:id>', bare emoji IDs, and unicode emoji
+// with or without spaces between them
+function parseReactions(arg) {
+    const reactions = [];
+    for (const token of arg.split(/\s+/).filter(Boolean)) {
+        if (/^\d{17,20}$/.test(token)) {
+            reactions.push(token);
+            continue;
+        }
+        for (const part of token.split(CUSTOM_EMOJI).filter(Boolean)) {
+            if (CUSTOM_EMOJI.test(part)) {
+                reactions.push(part);
+            } else {
+                reactions.push(...Array.from(graphemes.segment(part), s => s.segment));
+            }
+        }
+    }
+    return [...new Set(reactions)].slice(0, MAX_REACTIONS);
+}
+
 // Infobot markup: '|' separates random alternatives (but not the ':|' emoticon),
-// '<reply> x' sends x, '<action> x' sends *x*, '$who' is the asker, anything else is "key is value"
+// '<reply> x' sends x, '<action> x' sends *x*, '<react> 🎉 <:name:id>' reacts with those emoji,
+// '$who' is the asker, anything else is "key is value".
+// Returns { content } or { reactions }, or null if the chosen alternative is empty
 function formatFactoid(key, value, who) {
     const alternatives = value.split(/(?<!:)\|/).map(alt => alt.trim()).filter(Boolean);
     if (alternatives.length === 0) {
@@ -67,6 +94,11 @@ function formatFactoid(key, value, who) {
     }
 
     const choice = alternatives[Math.floor(Math.random() * alternatives.length)].replace(/\$who/g, who);
+    if (/^<react>/i.test(choice)) {
+        const reactions = parseReactions(choice.replace(/^<react>\s*/i, ''));
+        return reactions.length > 0 ? { reactions } : null;
+    }
+
     let text;
     if (/^<reply>/i.test(choice)) {
         text = choice.replace(/^<reply>\s*/i, '');
@@ -80,10 +112,10 @@ function formatFactoid(key, value, who) {
     if (!text) {
         return null;
     }
-    return text.length > DISCORD_MAX_LENGTH ? `${text.slice(0, DISCORD_MAX_LENGTH - 1)}…` : text;
+    return { content: text.length > DISCORD_MAX_LENGTH ? `${text.slice(0, DISCORD_MAX_LENGTH - 1)}…` : text };
 }
 
-// Returns the reply text for a message, or null if it doesn't match a factoid
+// Returns the formatFactoid result ({ content } or { reactions }) for a message, or null if it doesn't match a factoid
 async function getFactoidReply(content, who) {
     const key = normalizeKey(content);
     if (!key || key.length > MAX_KEY_LENGTH) {

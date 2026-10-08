@@ -44,7 +44,7 @@ function run(sql, params) {
 
 // Infobot-style alternatives are joined with '|'; plain text reads better joined with ' or '
 function appendValue(existing, addition) {
-    const usesMarkup = /<reply>|<action>|\|/i.test(existing) || /^<reply>|^<action>/i.test(addition);
+    const usesMarkup = /<reply>|<action>|<react>|\|/i.test(existing) || /^<reply>|^<action>|^<react>/i.test(addition);
     return `${existing.trim()}${usesMarkup ? '|' : ' or '}${addition}`;
 }
 

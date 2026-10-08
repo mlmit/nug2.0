@@ -15,8 +15,8 @@ module.exports = {
             }
 
             const who = interaction.member?.displayName ?? interaction.user.username;
-            // formatFactoid returns null for values that are empty after markup; fall back to the raw value
-            const text = formatFactoid(factoid.key, factoid.value, who) ?? `${factoid.key} is ${factoid.value.trim()}`;
+            // Fall back to the raw value for <react> factoids and values that are empty after markup
+            const text = formatFactoid(factoid.key, factoid.value, who)?.content ?? `${factoid.key} is ${factoid.value.trim()}`;
 
             // Show the key (a <reply> factoid hides it) plus whoever taught it and when, if known
             let footer = `\n-# "${factoid.key}"`;
